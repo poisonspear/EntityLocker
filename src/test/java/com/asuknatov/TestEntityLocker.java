@@ -58,7 +58,7 @@ public class TestEntityLocker {
             try {
                 locker.lock(id);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             } finally {
                 locker.unlock(id);
             }
@@ -67,6 +67,11 @@ public class TestEntityLocker {
         try {
             locker.lock(id);
             t.start();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         } finally {
             locker.unlock(id);
             t.join();
